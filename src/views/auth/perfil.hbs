@@ -1,0 +1,58 @@
+<div class="container mt-5 py-5">
+  <div class="d-flex justify-content-center">
+    <div class="card shadow-sm w-100" style="max-width: 720px;">
+      <div class="card-body">
+        <h2 class="card-title mb-4">Meu Perfil</h2>
+
+        <!-- Mensagens de sucesso ou erro -->
+        {{#if success_msg}}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{success_msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {{/if}}
+
+        {{#if error_msg}}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{error_msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {{/if}}
+
+        <!-- Formulário de atualização -->
+        <form action="/auth/perfil" method="POST" class="row g-3">
+          <div class="col-12">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" id="nome" name="nome" class="form-control" value="{{user.name}}" required>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{user.email}}" required>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label">Função</label>
+            <input type="text" class="form-control" value="{{user.role}}" disabled>
+          </div>
+
+          <div class="col-12 d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">Salvar alterações</button>
+            <a href="/" class="btn btn-outline-secondary">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    max-width: 960px;
+  }
+
+  .card-title {
+    font-weight: 600;
+    font-size: 1.75rem;
+  }
+</style>

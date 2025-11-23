@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow-sm w-100" style="max-width: 400px;">
+    <div class="card-body p-4">
+      <h2 class="card-title text-center mb-4">Entrar</h2>
+
+      {{#if success_msg}}
+        <div class="alert alert-success">{{success_msg}}</div>
+      {{/if}}
+      {{#if error_msg}}
+        <div class="alert alert-danger">{{error_msg}}</div>
+      {{/if}}
+
+      <form action="/auth/entrar" method="POST">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha</label>
+          <input
+            type="password"
+            name="senha"
+            id="senha"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="/auth/cadastro">Ainda não tem conta? Cadastre-se</a>
+      </div>
+    </div>
+  </div>
+</div>

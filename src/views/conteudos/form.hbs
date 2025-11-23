@@ -1,0 +1,94 @@
+<div class="container mt-5 py-5">
+    <div class="card mt-4 shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{#if conteudo}}Editar{{else}}Novo{{/if}} Conteúdo Teórico</h2>
+        </div>
+        <div class="card-body">
+            <form id="content-form" action="{{#if conteudo}}/conteudos/{{conteudo.id}}/atualizar{{else}}/conteudos/criar{{/if}}" method="POST" enctype="multipart/form-data">
+                {{#if conteudo}}
+                <input type="hidden" name="_method" value="PUT">
+                {{/if}}
+
+                <div class="mb-3">
+                    <label for="titulo" class="form-label">Título</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="titulo" 
+                        name="titulo" 
+                        value="{{conteudo.titulo}}"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="conteudo" class="form-label">Conteúdo</label>
+                    <textarea 
+                        class="form-control" 
+                        id="conteudo" 
+                        name="conteudo" 
+                        rows="10"
+                        required>{{conteudo.conteudo}}</textarea>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="mb-3">
+                    <label for="imagem_file" class="form-label">Imagem (arquivo) - opcional</label>
+                    {{#if conteudo.imagem}}
+                        <div class="mb-2">
+                            <img src="{{conteudo.imagem}}" alt="Imagem atual" class="img-fluid rounded" style="max-height:200px;">
+                        </div>
+                    {{/if}}
+                    <input type="file" class="form-control" id="imagem_file" name="imagem_file" accept="image/*">
+                </div>
+
+                <div class="mb-3">
+                    <label for="video_file" class="form-label">Vídeo (arquivo) - opcional</label>
+                    {{#if conteudo.video}}
+                        <div class="mb-2">
+                            <video controls class="rounded" style="max-width:100%; max-height:300px;"><source src="{{conteudo.video}}"></video>
+                        </div>
+                    {{/if}}
+                    <input type="file" class="form-control" id="video_file" name="video_file" accept="video/*">
+                </div>
+
+
+                <div class="d-flex gap-2 mt-4">
+                    <button id="save-btn" type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>
+                        <span id="save-text">{{#if conteudo}}Atualizar{{else}}Criar{{/if}}</span>
+                    </button>
+                    <a href="/conteudos" class="btn btn-secondary">
+                        <i class="fas fa-times-circle me-2"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('content-form');
+    const saveBtn = document.getElementById('save-btn');
+    const saveText = document.getElementById('save-text');
+    
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.warn('⚠️ Formulário inválido. Verifique os campos.');
+            form.classList.add('was-validated');
+            return false;
+        }
+
+        // Feedback visual ao enviar
+        console.log('📤 Enviando formulário de conteúdo...');
+        if (saveBtn) saveBtn.disabled = true;
+        if (saveText) saveText.textContent = 'Enviando...';
+    });
+});
+
+</script>

@@ -1,0 +1,14 @@
+<div class="container mt-5">
+	<h1 class="mb-4">Conteúdos</h1>
+	<div class="list-group">
+		{{#each conteudos}}
+			<a href="/conteudos/{{id}}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+				<div>
+					<h5 class="mb-1">{{titulo}}</h5>
+					<small class="text-muted">{{categoria}}</small>
+				</div>
+				<small class="text-muted">Ver mais</small>
+			</a>
+		{{/each}}
+	</div>
+</div>

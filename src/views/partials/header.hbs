@@ -1,0 +1,46 @@
+<header class="main-header bg-white shadow-sm fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand d-flex flex-column" href="/" aria-label="QuiShow - Home">
+        <span>
+          <span class="fw-bold text-primary">Qui</span><span class="text-danger">Show</span>
+        </span>
+        <small class="text-muted">Química Interativa</small>
+      </a>
+
+      <!-- Botão mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link {{#if isHome}}active{{/if}}" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link {{#if isExperimentos}}active{{/if}}" href="/experimentos">Experimentos</a></li>
+          <li class="nav-item"><a class="nav-link {{#if isConteudos}}active{{/if}}" href="/conteudos">Conteúdos</a></li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto align-items-center">
+          {{#if user}}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Olá, {{user.name}}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="/auth/perfil">Meu Perfil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="/auth/sair">Sair</a></li>
+              </ul>
+            </li>
+          {{else}}
+            <li class="nav-item me-2"><a class="btn btn-outline-primary" href="/auth/entrar">Entrar</a></li>
+            <li class="nav-item"><a class="btn btn-primary" href="/auth/cadastro">Cadastre-se</a></li>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow-sm w-100" style="max-width: 420px;">
+    <div class="card-body p-4">
+      <h2 class="card-title text-center mb-4">Criar Conta</h2>
+
+      {{#if success_msg}}
+        <div class="alert alert-success">{{success_msg}}</div>
+      {{/if}}
+      {{#if error_msg}}
+        <div class="alert alert-danger">{{error_msg}}</div>
+      {{/if}}
+
+      <form action="/auth/cadastro" method="POST">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" name="nome" id="nome" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" name="email" id="email" class="form-control" required>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="senha" class="form-label">Senha</label>
+              <input type="password" name="senha" id="senha" class="form-control" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="confirmar_senha" class="form-label">Confirme a Senha</label>
+              <input type="password" name="confirmar_senha" id="confirmar_senha" class="form-control" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="tipo" class="form-label">Tipo de usuário (opcional)</label>
+          <select name="tipo" id="tipo" class="form-select">
+            <option value="user" selected>Aluno</option>
+            <option value="professor">Professor (acesso administrativo)</option>
+          </select>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="/auth/entrar">Já tem uma conta? Entrar</a>
+      </div>
+    </div>
+  </div>
+</div>

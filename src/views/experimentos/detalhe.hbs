@@ -1,0 +1,321 @@
+<div class="container mt-5 py-5" data-experiment-id="{{experimento.id}}">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/experimentos">Experimentos</a></li>
+            <li class="breadcrumb-item active">{{experimento.title}}</li>
+        </ol>
+    </nav>
+
+    <!-- Cabeçalho -->
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div class="flex-grow-1">
+                <h1 class="mb-2">{{experimento.title}}</h1>
+                <p class="text-muted lead">Experimento educativo de química</p>
+            </div>
+
+            {{#if user}}
+            {{#if isAdmin}}
+            <div class="btn-group ms-3">
+                <a href="/experimentos/editar/{{experimento.id}}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a href="/experimentos/delete/{{experimento.id}}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Excluir
+                </a>
+            </div>
+            {{/if}}
+            {{/if}}
+        </div>
+
+        {{#if experimento.image}}
+        <div class="hero-media mb-4 rounded-3 overflow-hidden shadow-sm" style="max-height: 400px;">
+            <img src="{{experimento.image}}" alt="{{experimento.title}}" class="img-fluid w-100 h-100"
+                style="object-fit: cover;">
+        </div>
+        {{/if}}
+    </section>
+
+    <div class="row">
+        <div class="col-lg-8">
+
+            <!-- Descrição -->
+            <section class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-3"><i class="fas fa-info-circle text-primary"></i> Descrição</h3>
+                    <p class="lead">{{experimento.description}}</p>
+                </div>
+            </section>
+
+            <!-- Materiais -->
+            <section class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light border-bottom">
+                    <h3 class="mb-0"><i class="fas fa-list text-success"></i> Materiais Necessários</h3>
+                </div>
+                <div class="card-body">
+                    {{#if experimento.materiais.length}}
+                    <ul class="list-unstyled">
+                        {{#each experimento.materiais}}
+                        <li class="mb-2 ps-3 border-start border-3 border-success"><strong>{{this}}</strong></li>
+                        {{/each}}
+                    </ul>
+                    {{else}}
+                    <p class="text-muted">Nenhum material listado</p>
+                    {{/if}}
+                </div>
+            </section>
+
+            <!-- Passos -->
+            <section class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light border-bottom">
+                    <h3 class="mb-0"><i class="fas fa-tasks text-info"></i> Passos do Experimento</h3>
+                </div>
+                <div class="card-body">
+                    {{#if experimento.passos.length}}
+                    <ol class="list-styled">
+                        {{#each experimento.passos}}
+                        <li class="mb-3 ps-3">{{this}}</li>
+                        {{/each}}
+                    </ol>
+                    {{else}}
+                    <p class="text-muted">Nenhum passo listado</p>
+                    {{/if}}
+                </div>
+            </section>
+
+            <!-- Medidas de Segurança -->
+            <section class="card shadow-sm border-0 mb-4 border-warning">
+                <div class="card-header bg-warning bg-opacity-10 border-bottom border-warning">
+                    <h3 class="mb-0 text-warning"><i class="fas fa-exclamation-triangle"></i> ⚠️ Medidas de Segurança
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {{#if experimento.medidas_seguranca.length}}
+                    <ul class="list-unstyled">
+                        {{#each experimento.medidas_seguranca}}
+                        <li class="mb-2 ps-3 border-start border-3 border-warning"><strong>{{this}}</strong></li>
+                        {{/each}}
+                    </ul>
+                    {{else}}
+                    <p class="text-muted">Nenhuma medida de segurança especificada</p>
+                    {{/if}}
+                </div>
+            </section>
+
+            <!-- Video -->
+            {{#if experimento.video}}
+            <section class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light border-bottom">
+                    <h3 class="mb-0"><i class="fas fa-video text-danger"></i> Vídeo Demonstrativo</h3>
+                </div>
+                <div class="card-body">
+                    <div class="ratio ratio-16x9">
+                        <video controls class="rounded">
+                            <source src="{{experimento.video}}" type="video/mp4">
+                            Seu navegador não suporta vídeo.
+                        </video>
+                    </div>
+                </div>
+            </section>
+            {{/if}}
+
+            <!-- Comentários -->
+            <section class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light border-bottom">
+                    <h3 class="mb-0">
+                        <i class="fas fa-comments text-info"></i> Comentários ({{comentarios.length}})
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Formulário de novo comentário -->
+                    {{#if user}}
+                    <form id="comment-form" action="/experimentos/{{experimento.id}}/comentarios" method="POST"
+                        class="mb-4 pb-4 border-bottom">
+                        <textarea class="form-control mb-3" id="comentario" name="comentario" rows="3"
+                            placeholder="Deixe seu comentário..." required></textarea>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Comentar
+                        </button>
+                    </form>
+                    {{/if}}
+
+                    <!-- Lista de comentários -->
+                    <div id="comentarios-list">
+                        {{#each comentarios}}
+                        <div class="comment-item card mb-3 border-0 bg-light">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-subtitle mb-0">
+                                        <strong>{{usuario.nome}}</strong>
+                                    </h6>
+                                    <small class="text-muted">{{data_criacao}}</small>
+                                </div>
+                                <p class="card-text mt-2">{{conteudo}}</p>
+                                {{#if isAuthor}}
+                                <div class="d-flex gap-2 comment-actions-{{id}}">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="startEdit({{id}})">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="excluirComentario({{id}})">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                        {{else}}
+                        <p class="text-muted text-center py-4">Nenhum comentário ainda. Seja o primeiro!</p>
+                        {{/each}}
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4 sticky-top" style="top: 100px;">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">Estatísticas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="stat-item mb-3 d-flex justify-content-between">
+                        <span class="text-muted"><i class="fas fa-heart text-danger"></i> Curtidas</span>
+                        <strong class="h5" data-curtidas>{{experimento.curtidas}}</strong>
+                    </div>
+                    <div class="stat-item mb-3 d-flex justify-content-between">
+                        <span class="text-muted"><i class="fas fa-comments text-primary"></i> Comentários</span>
+                        <strong class="h5">{{comentarios.length}}</strong>
+                    </div>
+
+                    {{#if user}}
+                    <div class="d-grid mt-4">
+                        <form action="/experimentos/{{experimento.id}}/curtir" method="POST">
+                            <button type="submit"
+                                class="btn w-100 {{#if curtido}}btn-danger{{else}}btn-outline-danger{{/if}}">
+                                <i class="fas fa-heart"></i>
+                                {{#if curtido}}Remover Curtida{{else}}Curtir{{/if}}
+                            </button>
+                        </form>
+                    </div>
+                    {{else}}
+                    <div class="alert alert-info mb-0">
+                        <a href="/auth/entrar" class="alert-link">Faça login</a> para curtir e comentar!
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const experimentId = document.querySelector('.container').dataset.experimentId;
+
+    function startEdit(commentId) {
+        const commentItem = document.querySelector(`.comment-item:has(.comment-actions-${commentId})`);
+        if (!commentItem) return;
+
+        const currentTextElement = commentItem.querySelector('.card-text');
+        const currentText = currentTextElement.innerText.trim();
+
+        // Cria o textarea de edição
+        const textarea = document.createElement('textarea');
+        textarea.className = 'form-control mb-2';
+        textarea.value = currentText;
+        textarea.rows = 3;
+
+        // Cria os novos botões de Ação (Salvar e Cancelar)
+        const newActions = document.createElement('div');
+        newActions.className = 'd-flex gap-2 comment-edit-actions';
+
+        const saveButton = document.createElement('button');
+        saveButton.className = 'btn btn-sm btn-success';
+        saveButton.innerHTML = '<i class="fas fa-check"></i> Salvar';
+        saveButton.onclick = () => saveEdit(commentId, textarea.value, commentItem);
+
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'btn btn-sm btn-outline-secondary';
+        cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancelar';
+        cancelButton.onclick = () => cancelEdit(commentId, currentText, commentItem);
+
+        newActions.appendChild(saveButton);
+        newActions.appendChild(cancelButton);
+
+        // Substitui os elementos no DOM
+        currentTextElement.replaceWith(textarea);
+        commentItem.querySelector(`.comment-actions-${commentId}`).replaceWith(newActions);
+    }
+
+
+    function cancelEdit(commentId, originalText, commentItem) {
+        const textarea = commentItem.querySelector('textarea.form-control');
+        const currentEditActions = commentItem.querySelector('.comment-edit-actions');
+
+        // Recria o texto original
+        const originalTextElement = document.createElement('p');
+        originalTextElement.className = 'card-text mt-2';
+        originalTextElement.innerText = originalText;
+
+        // Recria os botões de ação originais
+        const originalActions = document.createElement('div');
+        originalActions.className = `d-flex gap-2 comment-actions-${commentId}`;
+        originalActions.innerHTML = `
+            <button class="btn btn-sm btn-outline-primary" onclick="startEdit(${commentId})">
+                <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="excluirComentario(${commentId})">
+                <i class="fas fa-trash"></i> Excluir
+            </button>
+        `;
+
+        // Reverte os elementos no DOM
+        textarea.replaceWith(originalTextElement);
+        currentEditActions.replaceWith(originalActions);
+    }
+
+    async function saveEdit(commentId, newContent, commentItem) {
+        try {
+            const response = await fetch(`/experimentos/${experimentId}/comentarios/${commentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ comentario: newContent }),
+            });
+
+            const currentTextElement = commentItem.querySelector('textarea.form-control');
+            const newTextElement = document.createElement('p');
+            newTextElement.className = 'card-text mt-2';
+            newTextElement.innerText = newContent;
+
+            currentTextElement.replaceWith(newTextElement);
+
+            const currentEditActions = commentItem.querySelector('.comment-edit-actions');
+            const originalActions = document.createElement('div');
+            originalActions.className = `d-flex gap-2 comment-actions-${commentId}`;
+            originalActions.innerHTML = `
+                <button class="btn btn-sm btn-outline-primary" onclick="startEdit(${commentId})">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="excluirComentario(${commentId})">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            `;
+            currentEditActions.replaceWith(originalActions);
+
+        } catch (error) {
+            console.error('Erro de rede ou servidor:', error);
+        }
+    }
+
+    function excluirComentario(commentId) {
+        if (confirm("Tem certeza que deseja deletar este comentário?")) {
+            window.location.href = `/experimentos/${experimentId}/comentarios/${commentId}`;
+        }
+    }
+</script>

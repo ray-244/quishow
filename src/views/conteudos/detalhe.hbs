@@ -1,0 +1,68 @@
+<div class="container mt-5 py-5">
+
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/conteudos">Conteúdos Teóricos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{conteudo.titulo}}</li>
+        </ol>
+    </nav>
+
+    <article class="card shadow-lg border-0">
+        
+        <header class="card-header bg-primary text-white p-4 rounded-top">
+            <h1 class="mb-2">{{conteudo.titulo}}</h1>
+            <div class="text-white-50">
+                <small>
+                    <i class="fas fa-calendar-alt me-1"></i> Publicado em {{conteudo.data_criacao}}
+                </small>
+            </div>
+        </header>
+
+        <div class="card-body p-4 p-md-5">
+
+            <section class="mb-5 text-center">
+                {{#if conteudo.imagem}}
+                    <div class="hero-media mb-4 rounded-3 overflow-hidden shadow-sm" style="max-height: 400px;">
+                        <img src="{{conteudo.imagem}}" alt="{{conteudo.titulo}}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                    </div>
+                {{/if}}
+
+                {{#if conteudo.video}}
+                    <div class="ratio ratio-16x9 mb-4">
+                        <video controls class="rounded shadow">
+                            <source src="{{conteudo.video}}">
+                            Seu navegador não suporta vídeo.
+                        </video>
+                    </div>
+                {{/if}}
+            </section>
+            
+            <section class="content lead">
+                {{{conteudo.conteudo}}}
+            </section>
+
+            {{#if user}}
+                {{#if isAdmin}} <div class="mt-5 pt-4 border-top d-flex gap-3">
+                        <a href="/conteudos/editar/{{conteudo.id}}" class="btn btn-warning">
+                            <i class="fas fa-edit me-1"></i> Editar Conteúdo
+                        </a>
+                        <form action="/conteudos/{{conteudo.id}}/deletar" method="POST" class="d-inline" onsubmit="return confirm('ATENÇÃO: Tem certeza que deseja excluir permanentemente este conteúdo?');">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-1"></i> Excluir
+                            </button>
+                        </form>
+                    </div>
+                {{/if}}
+            {{/if}}
+        </div>
+    </article>
+</div>
+
+<style>
+    .hero-media {
+        /* Garante que o contêiner de imagem se pareça com o do experimento */
+        position: relative;
+        overflow: hidden;
+    }
+</style>

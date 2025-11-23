@@ -1,0 +1,111 @@
+<div class="container mt-5 py-5">
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>{{#if experimento}}Editar{{else}}Novo{{/if}} Experimento</h2>
+        </div>
+        <div class="card-body">
+            <form id="experiment-form" action="{{#if experimento}}/experimentos/edit/{{experimento.id}}{{else}}/experimentos/create{{/if}}" method="POST" enctype="multipart/form-data">
+                {{#if experimento}}
+                <input type="hidden" name="_method" value="PUT">
+                {{/if}}
+                
+                <div class="mb-3">
+                    <label for="titulo" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="titulo" name="titulo" value="{{experimento.titulo}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="3" required>{{experimento.descricao}}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="materiais" class="form-label">Materiais (um por linha)</label>
+                    <textarea class="form-control" id="materiais" name="materiais" rows="5" required>{{#each experimento.materiais}}{{this}}&#10;{{/each}}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="passos" class="form-label">Passos do Experimento (um por linha)</label>
+                    <textarea class="form-control" id="passos" name="passos" rows="5" required>{{#each experimento.passos}}{{this}}&#10;{{/each}}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="medidas_seguranca" class="form-label">Medidas de Segurança (uma por linha)</label>
+                    <textarea class="form-control" id="medidas_seguranca" name="medidas_seguranca" rows="5" required>{{#each experimento.medidas_seguranca}}{{this}}&#10;{{/each}}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imagem_file" class="form-label">Imagem (arquivo) - opcional</label>
+                    {{#if experimento.imagem}}
+                        <div class="mb-2">
+                            <img src="{{experimento.imagem}}" alt="Imagem" class="img-fluid" style="max-height:200px;">
+                        </div>
+                    {{/if}}
+                    <input type="file" class="form-control" id="imagem_file" name="imagem_file" accept="image/*">
+                </div>
+
+                <div class="mb-3">
+                    <label for="video_file" class="form-label">Vídeo (arquivo) - opcional</label>
+                    {{#if experimento.video}}
+                        <div class="mb-2">
+                            <video controls style="max-width:100%; max-height:300px;"><source src="{{experimento.video}}"></video>
+                        </div>
+                    {{/if}}
+                    <input type="file" class="form-control" id="video_file" name="video_file" accept="video/*">
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button id="save-btn" type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-2"></i>
+                        <span id="save-text">Salvar</span>
+                    </button>
+                    <a href="{{#if experimento}}/experimentos/{{experimento.id}}{{else}}/experimentos{{/if}}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle me-2"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validação simples do formulário (Bootstrap)
+(function () {
+    'use strict'
+    const forms = document.querySelectorAll('form')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+
+<script>
+// Feedback visual ao enviar o formulário
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('experiment-form');
+    const saveBtn = document.getElementById('save-btn');
+    const saveText = document.getElementById('save-text');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+            form.classList.add('was-validated');
+            console.warn('⚠️ Formulário inválido. Verifique os campos.');
+            return false;
+        }
+
+        console.log('📤 Enviando formulário de experimento...');
+        console.log('Dados:', new FormData(form));
+        if (saveBtn) saveBtn.disabled = true;
+        if (saveText) saveText.textContent = 'Enviando...';
+    });
+});
+</script>
